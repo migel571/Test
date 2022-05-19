@@ -88,21 +88,21 @@ namespace PromocodeFactory.Infrastructure.Migrations
                 name: "CustomerPreference",
                 columns: table => new
                 {
-                    CustomerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PreferenceId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CustomersCustomerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PreferencesPreferenceId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CustomerPreference", x => new { x.PreferenceId, x.CustomerId });
+                    table.PrimaryKey("PK_CustomerPreference", x => new { x.CustomersCustomerId, x.PreferencesPreferenceId });
                     table.ForeignKey(
-                        name: "FK_CustomerPreference_Customer_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_CustomerPreference_Customer_CustomersCustomerId",
+                        column: x => x.CustomersCustomerId,
                         principalTable: "Customer",
                         principalColumn: "CustomerId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CustomerPreference_Preference_PreferenceId",
-                        column: x => x.PreferenceId,
+                        name: "FK_CustomerPreference_Preference_PreferencesPreferenceId",
+                        column: x => x.PreferencesPreferenceId,
                         principalTable: "Preference",
                         principalColumn: "PreferenceId",
                         onDelete: ReferentialAction.Cascade);
@@ -161,9 +161,9 @@ namespace PromocodeFactory.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomerPreference_CustomerId",
+                name: "IX_CustomerPreference_PreferencesPreferenceId",
                 table: "CustomerPreference",
-                column: "CustomerId");
+                column: "PreferencesPreferenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employee_RoleId",

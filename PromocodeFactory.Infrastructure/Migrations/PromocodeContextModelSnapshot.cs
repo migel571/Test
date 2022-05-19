@@ -22,6 +22,21 @@ namespace PromocodeFactory.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("CustomerPreference", b =>
+                {
+                    b.Property<Guid>("CustomersCustomerId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("PreferencesPreferenceId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("CustomersCustomerId", "PreferencesPreferenceId");
+
+                    b.HasIndex("PreferencesPreferenceId");
+
+                    b.ToTable("CustomerPreference");
+                });
+
             modelBuilder.Entity("PromocodeFactory.Domain.Administaration.Employee", b =>
                 {
                     b.Property<Guid>("EmployeeId")
@@ -100,21 +115,6 @@ namespace PromocodeFactory.Infrastructure.Migrations
                     b.HasKey("CustomerId");
 
                     b.ToTable("Customer", (string)null);
-                });
-
-            modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.CustomerPreference", b =>
-                {
-                    b.Property<Guid>("PreferenceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("PreferenceId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CustomerPreference", (string)null);
                 });
 
             modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.Partner", b =>
@@ -224,6 +224,21 @@ namespace PromocodeFactory.Infrastructure.Migrations
                     b.ToTable("PromoCode", (string)null);
                 });
 
+            modelBuilder.Entity("CustomerPreference", b =>
+                {
+                    b.HasOne("PromocodeFactory.Domain.PromocodeManagement.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomersCustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PromocodeFactory.Domain.PromocodeManagement.Preference", null)
+                        .WithMany()
+                        .HasForeignKey("PreferencesPreferenceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("PromocodeFactory.Domain.Administaration.Employee", b =>
                 {
                     b.HasOne("PromocodeFactory.Domain.Administaration.Role", "Role")
@@ -233,25 +248,6 @@ namespace PromocodeFactory.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.CustomerPreference", b =>
-                {
-                    b.HasOne("PromocodeFactory.Domain.PromocodeManagement.Customer", "Customer")
-                        .WithMany("CustomerPreferences")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PromocodeFactory.Domain.PromocodeManagement.Preference", "Preference")
-                        .WithMany("CustomerPreferences")
-                        .HasForeignKey("PreferenceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Preference");
                 });
 
             modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.PartnerPromoCodeLimit", b =>
@@ -291,8 +287,6 @@ namespace PromocodeFactory.Infrastructure.Migrations
 
             modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.Customer", b =>
                 {
-                    b.Navigation("CustomerPreferences");
-
                     b.Navigation("PromoCodes");
                 });
 
@@ -303,8 +297,6 @@ namespace PromocodeFactory.Infrastructure.Migrations
 
             modelBuilder.Entity("PromocodeFactory.Domain.PromocodeManagement.Preference", b =>
                 {
-                    b.Navigation("CustomerPreferences");
-
                     b.Navigation("PromoCodes");
                 });
 #pragma warning restore 612, 618

@@ -4,7 +4,9 @@ using NLog;
 using PromocodeFactory.Infrastructure;
 using PromocodeFactory.Infrastructure.Interfaces;
 using PromocodeFactory.Infrastructure.Interfaces.AdministrationRep;
+using PromocodeFactory.Infrastructure.Interfaces.PromocodeManagement;
 using PromocodeFactory.Infrastructure.Repository.Administration;
+using PromocodeFactory.Infrastructure.Repository.PromocodeManagement;
 using PromocodeFactory.LoggerService;
 using PromocodeFactoryApi.Extensions;
 
@@ -17,6 +19,8 @@ builder.Services.AddDbContext<PromocodeContext>(options => options.UseNpgsql(bui
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped<IRepositoryEmployee, EmployeeRepository>();
 builder.Services.AddScoped<IRepositoryRole, RoleRepository>();
+builder.Services.AddScoped<IRepositoryCustomer, CustomerRepository>();
+builder.Services.AddScoped<IRepositoryPreference, PreferenceRepository>();
 builder.Services.AddControllers();
 // Добавляем наши методы расширения из Extension
 builder.Services.ConfigureCors();
